@@ -2,6 +2,7 @@
 #include <iostream>
 #include <set>
 #include <stack>
+#include <vector>
 
 const int Quad::s_NW = 1;
 const int Quad::s_NE = 2;
@@ -181,10 +182,8 @@ void black_nodes(Quad* root,stack<int> path,std::set<int>& black_nodes_base10)
 
 }
 
-int main(int argc , char** argv)
+void print_black_nodes(int n)
 {
-	int n;
-	cin >> n;
 	Quad* root = process_matrix(n);
 
 	std::set<int> black_nodes_base10;
@@ -205,5 +204,147 @@ int main(int argc , char** argv)
 	cout << endl;
 	cout << "Total number of black nodes = " << count ;
 	cout << endl;
+}
+
+vector<int> decimal_to_base5(int n)
+{
+	vector<int> base5;
+	while(n)
+	{
+		base5.push_back(n%5);
+		n /= 5;
+	}
+	return base5;
+}
+
+void print_matrix(int** matrix, int size)
+{
+	for(int i=0; i < size; ++i)
+	{
+		for(int j=0; j < size; ++j)
+		{
+			if( matrix[i][j] == 0 ) cout << '.';
+			else cout << '*';
+		}
+		cout << "\n";
+	}
+}
+
+void get_matrix(int n)
+{
+	int size = n * -1;
+	int** matrix=new int*[size];
+
+	int input;
+	vector<int> inputs;
+	do
+	{
+		cin>>input;
+		if( input != -1 )
+		{
+			inputs.push_back(input);
+		}
+	}while(input != -1);
+	int default_val = 0;
+	if( inputs.size() == 0 )
+	{
+		default_val = 1;
+	}
+	for(int i=0; i< size; ++i)
+	{
+		matrix[i] = new int[size];
+		for(int j=0;j < size; ++j)matrix[i][j]=default_val;
+	}
+	if( (inputs.size() == 0) || ( inputs.size() == 1 && inputs[0] == 0 ) )	
+	{
+		print_matrix(matrix,size);
+	}
+
+	Quad::matrix = matrix;
+	Quad* root = new Quad(size,Position(0,0));
+
+	for( int val : inputs)
+	{
+		//cout << "\nval : " << val << "\n";
+		vector<int> path = decimal_to_base5(val);
+		Quad* start = root;
+		int current_size = size;
+
+		Position p;
+		for( int direction : path )
+		{
+			current_size /= 2;
+			//cout << "\ncurrent size : " << current_size << "\n";
+			//cout << direction;
+			if( direction == Quad::s_NW )
+			{
+				//cout << " NW ";
+				if( start->NW == 0 )
+				{
+					start->NW = new Quad(p,current_size);
+				}
+				start = start->NW;
+			}
+			else if( direction == Quad::s_NE )
+			{
+				//cout << " NE ";
+				p.y += current_size;
+				if( start->NE == 0 )
+				{
+					start->NE = new Quad(p,current_size);
+				}
+				start = start->NE;
+			}
+			else if( direction == Quad::s_SW )
+			{
+				//cout << " SW ";
+				p.x += current_size;
+				if( start->SW == 0 )
+				{
+					start->SW = new Quad(p,current_size);
+				}
+				start = start->SW;
+			}
+			else if( direction == Quad::s_SE )
+			{
+				//cout << " SE ";
+				p.x += current_size;
+				p.y += current_size;
+				if( start->SE == 0 )
+				{
+					start->SE = new Quad(p,current_size);
+				}
+				start = start->SE;
+			}
+		}
+		//cout << "\npostition(" << p.x << " , " << p.y << ") size : " << current_size <<"\n";
+		for(int i=0;i < start->size; ++i )
+		{
+			for(int j=0;j < start->size; ++j )
+			{
+				matrix[start->position.x+i][start->position.y+j] = 1;
+			}
+		}
+	}
+
+	print_matrix(matrix,size);
+}
+
+int main(int argc , char** argv)
+{
+	int n;
+	do
+	{
+		cin >> n;
+		if( n > 0 )
+		{
+			print_black_nodes(n);
+		}
+		else if(n < 0)
+		{
+			get_matrix(n);
+		}
+	}while(n != 0);
+
 	return 0;
 }

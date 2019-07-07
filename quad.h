@@ -5,7 +5,7 @@ struct Position
 {
 	int x;
 	int y;
-	Position(int _x, int _y):x(_x),y(_y){}
+	Position(int _x=0, int _y=0):x(_x),y(_y){}
 };
 
 class Quad
