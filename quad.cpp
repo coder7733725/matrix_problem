@@ -191,11 +191,19 @@ int main(int argc , char** argv)
 	stack<int> path;
 
 	black_nodes(root,path,black_nodes_base10);
-
+	int count=0;
 	for( int val : black_nodes_base10)
 	{
 		cout << val << " ";
+		++count;
+		if(count %12 == 0)
+		{
+			cout<<endl;
+		}
+
 	}
+	cout << endl;
+	cout << "Total number of black nodes = " << count ;
 	cout << endl;
 	return 0;
 }
