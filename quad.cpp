@@ -345,6 +345,7 @@ int main(int argc , char** argv)
 		{
 			get_matrix(n);
 		}
+		cout << "\n";
 	}while(n != 0);
 
 	return 0;
