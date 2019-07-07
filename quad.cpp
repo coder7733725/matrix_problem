@@ -258,6 +258,7 @@ void get_matrix(int n)
 	if( (inputs.size() == 0) || ( inputs.size() == 1 && inputs[0] == 0 ) )	
 	{
 		print_matrix(matrix,size);
+		return;
 	}
 
 	Quad::matrix = matrix;
