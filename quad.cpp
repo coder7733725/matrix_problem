@@ -246,7 +246,7 @@ void get_matrix(int n)
 		}
 	}while(input != -1);
 	int default_val = 0;
-	if( inputs.size() == 0 )
+	if( inputs.size() == 1 && inputs[0] == 0 )
 	{
 		default_val = 1;
 	}
